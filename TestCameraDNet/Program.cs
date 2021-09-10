@@ -24,7 +24,6 @@ namespace TestCameraDNet
 
             string html = @"http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata";
             string URL = @"http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata";
-
             
 
             var client = new WebClient { Credentials = new NetworkCredential("root", "admin") };
