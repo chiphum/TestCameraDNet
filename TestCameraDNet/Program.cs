@@ -23,33 +23,62 @@ namespace TestCameraDNet
         {
 
             string html = @"http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata";
-            string URL = @"http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata";
-            
+            string URL = @"http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata";            
 
             var client = new WebClient { Credentials = new NetworkCredential("root", "admin") };
 
-            CredentialCache myCache = new CredentialCache();
+            //CredentialCache myCache = new CredentialCache();
 
-            string reso;
-
-
+            //URL for Jpg
             URL = @"http://10.202.90.148/axis-cgi/jpg/image.cgi";
 
             byte[] data = client.DownloadData(URL);
 
             string dirnow = Directory.GetCurrentDirectory();
 
-
             using (Image img = Image.FromStream(new MemoryStream(data)))
             {
 
                 img.Save("foo.jpg", ImageFormat.Jpeg);
 
+            }
+
+
+            //URL for Presets
+            URL = @"http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata";
+
+            string presets = client.DownloadString(URL);
+
+            using(var reader = new StringReader(presets))
+            {
+                //Read over Each Line
+                for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+                {
+                    if (line.Contains('='))
+                    {
+                        Console.WriteLine(line + " : With = ");                        
+                    }
+                    else
+                    {
+                        Console.WriteLine(line + " : Without = ");
+                    }
+                    
+
+                }
 
             }
 
 
-            reso = System.Text.Encoding.UTF8.GetString(client.DownloadData(URL));
+
+
+
+            StringReader strReader = new StringReader(presets);
+
+            //foreach (string line in new LineReader(() => new StringReader(presets)))
+            //{
+            //    Console.WriteLine(line);
+            //}
+
 
 
             Uri uriz = new Uri("http://10.202.90.148/axis-cgi/com/ptz.cgi?query=presetposcamdata");
